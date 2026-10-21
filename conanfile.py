@@ -141,8 +141,6 @@ class XSCTreeDataConan(ConanFile):
                 relWithDebInfo_dir,
             ]
         )
-        subprocess.run(
-
         self.copy(pattern="*", src=package_dir)
 
     def package_id(self):
