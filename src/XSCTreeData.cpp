@@ -53,17 +53,16 @@ void XSCTreeData::init()
 
 
 void extractNames(const QJsonObject& obj, QStringList& names) {
-    if (obj.contains("name")) {
-        names.append(obj["name"].toString());
+    const auto children = obj.value("children").toArray();
+    if (children.isEmpty()) {
+        const auto name = obj.value("name").toString();
+        if (!name.isEmpty())
+            names.append(name);
+        return;
     }
-
-    if (obj.contains("children")) {
-        QJsonArray children = obj["children"].toArray();
-        for (int i = 0; i < children.size(); ++i) {
-            QJsonObject child = children[i].toObject();
-            extractNames(child, names);
-        }
-    }
+    for (const auto& child : children)
+        if (child.isObject())
+            extractNames(child.toObject(), names);
 }
 
 QStringList getNames(const QJsonObject& root) {
@@ -184,12 +183,12 @@ void XSCTree::setTreeLeafNames(QStringList jsonString)
 }
 QJsonObject& XSCTree::getTreeData()
 {
-    return  getRawData<XSCTreeData>()->getTreeDataRaw();// TODO: insert return statement here
+    return  getRawData<XSCTreeData>()->getTreeDataRaw();
 }
 
 QStringList& XSCTree::getTreeLeafNames()
 {
-    return  getRawData<XSCTreeData>()->getTreeLeafNamesRaw();// TODO: insert return statement here
+    return  getRawData<XSCTreeData>()->getTreeLeafNamesRaw();
 }
 
 void XSCTree::fromVariantMap(const QVariantMap& variantMap)
