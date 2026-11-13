@@ -12,7 +12,7 @@ InfoAction::InfoAction(QObject* parent, XSCTree& clusters) :
     _treeInfoAction(this, "XSCTree info"),
     _leafInfoAction(this, "Leaf info")
 {
-    setText("XSCTree JSON Info");
+    setText(tr("Reference tree details"));
 
 
     _treeInfoAction.setIconByName("code");

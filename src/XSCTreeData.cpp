@@ -122,6 +122,7 @@ mv::plugin::RawData* XSCTreeDataFactory::produce()
 
 void XSCTree::init()
 {
+    setIconByName("sitemap");
     _infoAction = QSharedPointer<InfoAction>::create(nullptr, *this);
 
     addAction(*_infoAction.get());
