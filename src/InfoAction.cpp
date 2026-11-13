@@ -1,3 +1,4 @@
+#include "QtTooltipKit.h"
 #include "InfoAction.h"
 
 #include "event/Event.h"
@@ -14,7 +15,11 @@ InfoAction::InfoAction(QObject* parent, XSCTree& clusters) :
     setText("XSCTree JSON Info");
 
 
+    _treeInfoAction.setIconByName("code");
+    qttooltipkit::set(_treeInfoAction, tr("Tree structure"), tr("Inspect the source JSON, including the branches and their leaf names."));
     _treeInfoAction.setDefaultWidgetFlags(StringAction::TextEdit);
+    _leafInfoAction.setIconByName("leaf");
+    qttooltipkit::set(_leafInfoAction, tr("Tree leaves"), tr("Read the species names stored at the tips of the reference tree."));
     _leafInfoAction.setDefaultWidgetFlags(StringAction::TextEdit);
 
     addAction(&_leafInfoAction, -1, [this](WidgetAction* action, QWidget* widget) -> void {

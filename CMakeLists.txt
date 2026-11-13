@@ -52,6 +52,21 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PLUGIN_SOURCES} ${PLUGIN_H
 # Create dynamic library for the plugin
 add_library(${PROJECT_NAME} SHARED ${PLUGIN_SOURCES} ${PLUGIN_HEADERS})
 
+if(NOT TARGET QtTooltipKit::Tooltips)
+    if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/../qt-tooltip-kit/CMakeLists.txt")
+        add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../qt-tooltip-kit" "${CMAKE_BINARY_DIR}/qt-tooltip-kit")
+    else()
+        set(QT_TOOLTIP_KIT_REPOSITORY "https://github.com/sbvis/qt-tooltip-kit.git" CACHE STRING "Qt Tooltip Kit repository")
+        set(QT_TOOLTIP_KIT_REVISION "4940bfd0a17358a2b7e17e12d41688c22b9a9615" CACHE STRING "Qt Tooltip Kit commit")
+        include(FetchContent)
+        FetchContent_Declare(QtTooltipKit
+            GIT_REPOSITORY "${QT_TOOLTIP_KIT_REPOSITORY}"
+            GIT_TAG "${QT_TOOLTIP_KIT_REVISION}")
+        FetchContent_MakeAvailable(QtTooltipKit)
+    endif()
+endif()
+target_link_libraries(${PROJECT_NAME} PRIVATE QtTooltipKit::Tooltips)
+
 qt_wrap_cpp(PLUGIN_MOC ${PLUGIN_HEADERS} TARGET ${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE ${PLUGIN_MOC})
 
